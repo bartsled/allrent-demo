@@ -435,15 +435,17 @@ main { position: relative; z-index: 1; }
   .how .btn-row { flex-wrap: nowrap; }
   .how .btn-row .btn { flex: 1 1 0; min-width: 0; padding: 0 10px; font-size: 15px; }
   .foot-left { padding-top: 48px; gap: 0; }
-  .foot-nav { display: grid; grid-template-columns: max-content max-content; justify-content: space-between; gap: 14px 16px; padding-right: max(var(--gutter), env(safe-area-inset-right, 0px)); }
-  .foot-nav a { font-size: clamp(15px, 4.3vw, 18px); white-space: nowrap; }
-  .foot-branches { flex-wrap: nowrap; gap: 16px; margin-top: 40px; }
+  .foot-nav { gap: 10px; }
+  .foot-nav a { font-size: 24px; }
+  .foot-branches { flex-wrap: nowrap; gap: 16px; margin-top: 36px; }
   .foot-branches > div { flex: 1 1 0; min-width: 0; }
   .foot-branches h3 { font-size: 17px; margin-bottom: 8px; }
   .foot-branches p { font-size: 14px; overflow-wrap: anywhere; }
   .foot-cta { padding-block: 32px; gap: 16px; }
   .foot-cta p { font-size: 18px; }
-  .foot-img { aspect-ratio: 2 / 1; }
+  .foot-img { aspect-ratio: 5 / 2; }
+  .foot-bar { min-height: 0; padding-top: 14px; padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)); row-gap: 4px; font-size: 13px; }
+  .foot-bar div { column-gap: 16px; }
   .usps .wrap { padding-block: 48px 96px; gap: 32px; }
   .usp-grid { grid-template-columns: 1fr; }
   .usp + .usp { border-left: 0; border-top: 1px solid var(--on-dark-line); }
@@ -451,12 +453,15 @@ main { position: relative; z-index: 1; }
   .rent-head .rent-help { width: 100%; justify-content: space-between; }
   .card { height: 300px; }
   .branch { height: auto; min-height: 440px; padding: 12px; }
-  .branch-row { grid-template-columns: 64px 1fr 32px; gap: 8px 12px; padding-right: 4px; }
-  .branch-row .thumb { width: 64px; height: 48px; grid-row: auto; }
-  .branch-row .name { grid-column: 2; }
-  .branch-row .wa-link { grid-column: 3; grid-row: 1; }
-  .branch-row .thumb { grid-row: 1; }
-  .branch-row .details { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1.25fr; gap: 12px; font-size: 14px; }
+  .branch-list { padding: 4px 14px; gap: 0; }
+  .branch-row .details .contact { white-space: nowrap; }
+  .branch-row { grid-template-columns: 1fr 32px; gap: 12px; padding: 16px 0; }
+  .branch-row .thumb { display: none; }
+  .branch-row .name { grid-column: 1; font-size: 18px; }
+  .branch-row .name br { display: none; }
+  .branch-row .wa-link { grid-column: 2; grid-row: 1; }
+  .branch-row .details { grid-column: 1 / -1; display: grid; grid-template-columns: 9.6em minmax(0, 1fr); gap: 16px; font-size: 14px; }
+  .branch-row .details .addr { white-space: nowrap; }
   .branch-row .addr, .branch-row .contact { white-space: normal; overflow-wrap: anywhere; }
   .loc-media { aspect-ratio: 3 / 4; }
 }
@@ -664,7 +669,7 @@ main { position: relative; z-index: 1; }
           <div class="branch-list">
             <div class="branch-row">
               <div class="thumb"><img src="assets/thumb-breda.jpg" alt="" style="object-position:50% 4%"></div>
-              <p class="name">All Rent<br><span class="red">Breda</span></p>
+              <p class="name">All Rent <br><span class="red">Breda</span></p>
               <div class="details"><p class="addr">Franse Akker 15<br>4824 AL Breda</p>
               <p class="contact">+31 076 587 92 25<br>breda@all-rent.nl</p></div>
               <a class="wa-link" href="https://wa.me/31765879225" aria-label="WhatsApp All Rent Breda"><img class="wa" src="assets/icons/whatsapp.svg" alt="" width="32" height="32"></a>
@@ -672,7 +677,7 @@ main { position: relative; z-index: 1; }
             <hr>
             <div class="branch-row">
               <div class="thumb"><img src="assets/thumb-roosendaal.jpg" alt=""></div>
-              <p class="name">All Rent<br><span class="red">Roosendaal</span></p>
+              <p class="name">All Rent <br><span class="red">Roosendaal</span></p>
               <div class="details"><p class="addr">Belder 96-H<br>4704RK Roosendaal</p>
               <p class="contact">+31 0165 54 57 11<br>roosendaal@all-rent.nl</p></div>
               <a class="wa-link" href="https://wa.me/31165545711" aria-label="WhatsApp All Rent Roosendaal"><img class="wa" src="assets/icons/whatsapp.svg" alt="" width="32" height="32"></a>
