@@ -241,7 +241,8 @@ body.nav-open { overflow: hidden; }
 
 .how { padding-bottom: 112px; }
 .how .wrap > hr { border: 0; height: 1px; background: var(--rule); margin: 0 0 112px; }
-.how-grid { display: grid; grid-template-columns: 344fr 472fr 344fr; gap: 80px; align-items: center; }
+.how-grid { display: grid; grid-template-columns: minmax(362px, 344fr) 472fr 344fr; gap: 80px; align-items: center; }
+.how-text .btn-row { flex-wrap: nowrap; }
 .how-text { display: flex; flex-direction: column; gap: 40px; }
 .how-text .h2 { margin-top: 16px; }
 .how-text .lead { margin-top: 24px; }
@@ -281,14 +282,14 @@ body.nav-open { overflow: hidden; }
 .branch-row .thumb img { width: 100%; height: 100%; object-fit: cover; }
 .branch-row .name { font-size: 20px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; }
 .branch-row .addr, .branch-row .contact { line-height: 1.3; }
-.branch-row .contact { white-space: nowrap; }
+.branch-row .contact, .branch-row .addr { white-space: nowrap; }
 .wa { display: block; width: 32px; height: 32px; transition: transform .3s var(--ease-natural); }
 .wa:hover { transform: scale(1.12); }
 .loc-media { border-radius: 8px; overflow: hidden; aspect-ratio: 648 / 864; background: var(--ink); }
 .loc-media video, .loc-media img { width: 100%; height: 100%; object-fit: cover; }
 
 /* ───────── FAQ ───────── */
-.faq { background: var(--ink); color: var(--white); border-radius: 24px; margin-top: -16px; position: relative; z-index: 1; }
+.faq { background: var(--ink); color: var(--white); border-radius: 24px; margin-top: -16px; position: relative; z-index: 1; box-shadow: 0 24px 48px -24px rgba(38,38,38,.35); }
 .faq .wrap { padding-block: 112px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
 .faq-intro { display: flex; flex-direction: column; gap: 24px; padding-right: 88px; }
 .faq-intro .pill { border-color: var(--on-dark-border); align-self: flex-start; }
@@ -308,12 +309,19 @@ body.nav-open { overflow: hidden; }
 .qa-a > div { overflow: hidden; }
 .qa-a p { padding: 0 88px 24px 24px; font-size: 18px; line-height: 1.3; letter-spacing: -0.02em; }
 .qa.is-open .qa-a { grid-template-rows: 1fr; }
+.qa-a p + .opts { margin-top: -12px; }
+.opts { list-style: none; margin: 0; padding: 0 88px 24px 24px; display: grid; gap: 0; font-size: 18px; line-height: 1.3; letter-spacing: -0.02em; }
+.opts li { display: flex; justify-content: space-between; gap: 16px; padding: 8px 0; border-bottom: 1px solid var(--rule); }
+.opts li:last-child { border-bottom: 0; }
+.opts li span:last-child { font-variant-numeric: tabular-nums; white-space: nowrap; opacity: .8; }
 .qa.is-open button { padding-bottom: 8px; }
 
 /* ───────── Footer ───────── */
-.footer { background: var(--red); margin-top: -10px; }
-.foot-top { background: var(--mist); border-radius: 0 0 24px 24px; overflow: hidden; display: grid; grid-template-columns: 768fr 744fr; min-height: 866px; max-width: 1512px; margin-inline: auto; }
-.footer { --fpad: max(48px, env(safe-area-inset-left, 0px)); }
+.footer { background: var(--red); margin-top: -24px; position: relative; z-index: 0; overflow: hidden; }
+main { position: relative; z-index: 1; }
+.foot-shift { will-change: transform; }
+.foot-top { background: var(--mist); border-radius: 0 0 24px 24px; overflow: hidden; display: grid; grid-template-columns: 768fr 744fr; min-height: 866px; }
+.footer { --fpad: max(48px, calc((100vw - 1512px) / 2 + 48px), env(safe-area-inset-left, 0px)); --fpad-r: max(48px, calc((100vw - 1512px) / 2 + 48px), env(safe-area-inset-right, 0px)); }
 .foot-left { display: flex; flex-direction: column; justify-content: space-between; gap: 48px; padding-top: 96px; min-width: 0; }
 .foot-nav { list-style: none; margin: 0; padding: 0 0 0 var(--fpad); display: flex; flex-direction: column; gap: 24px; }
 .foot-nav a { font-size: 32px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; display: inline-block; transition: color .25s; }
@@ -328,7 +336,7 @@ body.nav-open { overflow: hidden; }
 .foot-img { position: relative; overflow: hidden; min-height: 360px; }
 .foot-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .foot-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; min-height: 80px;
-  max-width: 1512px; margin-inline: auto; padding: 16px max(48px, env(safe-area-inset-right, 0px)) calc(16px + env(safe-area-inset-bottom, 0px)) var(--fpad);
+  padding: 16px var(--fpad-r) calc(16px + env(safe-area-inset-bottom, 0px)) var(--fpad);
   color: var(--white); font-size: 14px; line-height: 1.3; }
 .foot-bar div { display: flex; gap: 8px 24px; flex-wrap: wrap; }
 .foot-bar a:hover { text-decoration: underline; text-underline-offset: 3px; }
@@ -344,6 +352,14 @@ body.nav-open { overflow: hidden; }
   .js-reveal .foot-branches.in > div:nth-child(2) { transition-delay: .2s; }
 }
 
+/* Subtiele scroll-fades: één keer, van 24px omhoog, getrapt binnen lijsten */
+@media (prefers-reduced-motion: no-preference) {
+  .js-reveal [data-fade], .js-reveal [data-fade-stagger] > * { opacity: 0; transform: translateY(24px); transition: opacity 1s var(--ease-slow), transform 1s var(--ease-slow); }
+  .js-reveal [data-fade].in, .js-reveal [data-fade-stagger].in > * { opacity: 1; transform: none; }
+  .js-reveal .how-img[data-fade] { transform: translateY(40px) scale(.98); }
+  .js-reveal .how-img[data-fade].in { transform: none; }
+}
+
 /* Video-dialoog */
 .vdialog { border: 0; padding: 0; background: transparent; max-width: min(1080px, calc(100vw - 32px)); width: 100%; }
 .vdialog::backdrop { background: rgba(38,38,38,.85); }
@@ -352,7 +368,8 @@ body.nav-open { overflow: hidden; }
 
 /* ───────── Responsive ───────── */
 @media (max-width: 1180px) {
-  .nav-links, .nav-right .btn { display: none; }
+  .nav-links { display: none; }
+  .nav-right { gap: 12px; }
   .nav-toggle { display: inline-flex; }
   .nav-inner { padding-left: max(var(--gutter), env(safe-area-inset-left, 0px)); padding-right: max(var(--gutter), env(safe-area-inset-right, 0px)); }
   .nav-left { flex: 0 1 auto; }
@@ -362,6 +379,7 @@ body.nav-open { overflow: hidden; }
   .usp:nth-child(n+3) { border-top: 1px solid var(--on-dark-line); }
   .how-grid { grid-template-columns: 1fr 1fr; gap: 48px 40px; }
   .how-text { grid-column: 1 / -1; }
+  .how-text .btn-row { flex-wrap: wrap; }
   .how-text .lead { max-width: 560px; }
   .loc-grid { grid-template-columns: 1fr; }
   .loc-intro { padding-right: 0; max-width: 640px; }
@@ -395,8 +413,9 @@ body.nav-open { overflow: hidden; }
   .faq .wrap { padding-block: 80px; }
   .qa button { font-size: 18px; padding: 20px; }
   .qa-a p { padding: 0 20px 20px; font-size: 16px; }
+  .opts { padding: 0 20px 20px; font-size: 16px; }
   .foot-top { grid-template-columns: 1fr; min-height: 0; }
-  .footer { --fpad: max(var(--gutter), env(safe-area-inset-left, 0px)); }
+  .footer { --fpad: max(var(--gutter), env(safe-area-inset-left, 0px)); --fpad-r: max(var(--gutter), env(safe-area-inset-right, 0px)); }
   .foot-left { padding-top: 64px; }
   .foot-nav a { font-size: 26px; }
   .foot-nav { gap: 18px; }
@@ -407,6 +426,8 @@ body.nav-open { overflow: hidden; }
   .foot-bar { padding-right: max(var(--gutter), env(safe-area-inset-right, 0px)); }
 }
 @media (max-width: 600px) {
+  .nav-right .btn { display: none; }
+  .foot-branches { flex-direction: column; gap: 32px; }
   .usps .wrap { padding-block: 48px 96px; gap: 32px; }
   .usp-grid { grid-template-columns: 1fr; }
   .usp + .usp { border-left: 0; border-top: 1px solid var(--on-dark-line); }
@@ -541,8 +562,8 @@ body.nav-open { overflow: hidden; }
     <div class="wrap">
       <hr>
       <div>
-        <h2 class="h2" id="usp-title">Waarom kiezen voor<br><span class="red">All Rent</span> Autoverhuur?</h2>
-        <div class="usp-grid">
+        <h2 class="h2" id="usp-title" data-fade>Waarom kiezen voor<br><span class="red">All Rent</span> Autoverhuur?</h2>
+        <div class="usp-grid" data-fade>
           <article class="usp" tabindex="0"><span class="ico ico-48 i-hood"></span><div><h3>24/7 pechhulp in Europa</h3><p>Bij pech of schade onderweg ben je verzekerd van hulp.</p></div></article>
           <article class="usp" tabindex="0"><span class="ico ico-48 i-driver"></span><div><h3>Kosteloos meerdere bestuurders</h3><p>Handig voor lange ritten, verhuizingen of zakelijke huur.</p></div></article>
           <article class="usp is-active" tabindex="0"><span class="ico ico-48 i-taxi"></span><div><h3>Haal- en brengservice in heel Nederland</h3><p>Laat je huurauto of bus bezorgen of ophalen waar nodig.</p></div></article>
@@ -556,11 +577,11 @@ body.nav-open { overflow: hidden; }
     <!-- Wat wil je huren -->
     <section class="rent" id="huren" aria-labelledby="rent-title">
       <div class="wrap">
-        <div class="rent-head">
+        <div class="rent-head" data-fade>
           <h2 class="h2" id="rent-title">Wat wil je huren?</h2>
           <div class="rent-help"><span>Heb je hulp nodig?</span><a class="btn btn-line btn-lg" href="tel:+31765879225"><span class="ico i-phone"></span>Bel met ons</a></div>
         </div>
-        <div class="cards">
+        <div class="cards" data-fade>
           <article class="card is-open">
             <img src="assets/card-bus.jpg" alt="" style="object-position:50% 100%">
             <span class="card-label" aria-hidden="true">Bus huren</span>
@@ -590,7 +611,7 @@ body.nav-open { overflow: hidden; }
       <div class="wrap">
         <hr>
         <div class="how-grid">
-          <div class="how-text">
+          <div class="how-text" data-fade>
             <div>
               <span class="pill">Zo werkt ‘t</span>
               <h2 class="h2" id="how-title">Zo werkt huren bij <span class="red">All Rent</span>.</h2>
@@ -601,8 +622,8 @@ body.nav-open { overflow: hidden; }
               <a class="btn btn-line btn-lg" href="#reserveren" data-type-link="Auto">Reserveer een auto</a>
             </div>
           </div>
-          <div class="how-img"><img src="assets/how.jpg" alt="Medewerker van All Rent aan het werk achter de computer" loading="lazy"></div>
-          <ol class="steps">
+          <div class="how-img" data-fade><img src="assets/how.jpg" alt="Medewerker van All Rent aan het werk achter de computer" loading="lazy"></div>
+          <ol class="steps" data-fade-stagger>
             <li class="step"><button type="button"><span class="num">1</span><span><span class="step-title">Kies je voertuig</span></span></button><span class="step-bar"></span></li>
             <li class="step is-active"><button type="button"><span class="num">2</span><span><span class="step-title">Kies vestiging en datum</span><span class="step-desc"><span><span>Bepaal jouw ophaallocatie, Breda of Roosendaal. Kies een datum en tijd.</span></span></span></span></button><span class="step-bar"></span></li>
             <li class="step"><button type="button"><span class="num">3</span><span><span class="step-title">Bekijk beschikbaarheid</span></span></button><span class="step-bar"></span></li>
@@ -617,12 +638,12 @@ body.nav-open { overflow: hidden; }
   <section class="locations" id="vestigingen" aria-labelledby="loc-title">
     <div class="wrap loc-grid">
       <div class="loc-left">
-        <div class="loc-intro">
+        <div class="loc-intro" data-fade>
           <span class="pill" style="align-self:flex-start">Vestigingen</span>
           <h2 class="h2" id="loc-title">Altijd dichtbij in<br><span class="red">Breda</span> en <span class="red">Roosendaal</span></h2>
           <p class="lead">Huur eenvoudig een personenauto, bestelbus of personenbus en kies de locatie die het beste past bij jouw rit. Particulier of zakelijk, kort of lang: je bent snel op weg.</p>
         </div>
-        <div class="branch">
+        <div class="branch" data-fade>
           <img src="assets/branch-breda.jpg" alt="Vestiging All Rent Breda" loading="lazy">
           <div class="branch-list">
             <div class="branch-row">
@@ -643,7 +664,7 @@ body.nav-open { overflow: hidden; }
           </div>
         </div>
       </div>
-      <div class="loc-media">
+      <div class="loc-media" data-fade>
         <video autoplay muted loop playsinline preload="metadata" poster="assets/branch-roosendaal.jpg" aria-label="Vestiging All Rent Roosendaal">
           <source src="assets/branch.mp4" type="video/mp4">
         </video>
@@ -654,29 +675,30 @@ body.nav-open { overflow: hidden; }
   <!-- FAQ -->
   <section class="faq" aria-labelledby="faq-title">
     <div class="wrap">
-      <div class="faq-intro">
+      <div class="faq-intro" data-fade>
         <span class="pill">FAQ</span>
         <h2 class="h2" id="faq-title">Veelgestelde vragen</h2>
         <p class="lead">In een paar stappen regel je eenvoudig jouw huurauto of bus. Kies wat je nodig hebt, check de beschikbaarheid en reserveer direct.</p>
         <a class="btn btn-line-dark" href="#faq-title">Bekijk alle vragen</a>
       </div>
-      <div class="qa-list">
+      <div class="qa-list" data-fade-stagger>
         <div class="qa"><button type="button" aria-expanded="false" id="q1" aria-controls="a1"><span>Ophalen en terugbrengen van de huurauto of -bus?</span><span class="ring"><span class="ico ico-12 i-arrow"></span></span></button>
-          <div class="qa-a" id="a1" role="region" aria-labelledby="q1"><div><p>[Antwoord nog aanleveren]</p></div></div></div>
+          <div class="qa-a" id="a1" role="region" aria-labelledby="q1"><div><p>Ophalen kan tijdens onze openingstijden. Terugbrengen verschilt per vestiging: in Breda kan dat 24/7 via onze sleutelkluis, in Roosendaal tijdens openingstijden.</p></div></div></div>
         <div class="qa is-open"><button type="button" aria-expanded="true" id="q2" aria-controls="a2"><span>Hoe werkt de borg?</span><span class="ring"><span class="ico ico-12 i-arrow"></span></span></button>
           <div class="qa-a" id="a2" role="region" aria-labelledby="q2"><div><p>Voor huurperiodes van 1 tot 3 dagen geldt een borg van €750. Deze betaal je met pin of creditcard (geen contant). Na inlevering van de auto of bus verrekenen we de huurkosten, extra kilometers en brandstof. Het restant storten we binnen twee werkdagen terug.</p></div></div></div>
         <div class="qa"><button type="button" aria-expanded="false" id="q3" aria-controls="a3"><span>Wat is een all-in prijs?</span><span class="ring"><span class="ico ico-12 i-arrow"></span></span></button>
-          <div class="qa-a" id="a3" role="region" aria-labelledby="q3"><div><p>[Antwoord nog aanleveren]</p></div></div></div>
+          <div class="qa-a" id="a3" role="region" aria-labelledby="q3"><div><p>De prijzen die je op de website ziet, zijn de prijzen die je betaalt. Een tweede bestuurder, de verzekering en pechhulp in Nederland zijn inbegrepen. Alleen het eigen risico kun je nog verlagen.</p></div></div></div>
         <div class="qa"><button type="button" aria-expanded="false" id="q4" aria-controls="a4"><span>Mag ik met de huurauto naar het buitenland?</span><span class="ring"><span class="ico ico-12 i-arrow"></span></span></button>
-          <div class="qa-a" id="a4" role="region" aria-labelledby="q4"><div><p>[Antwoord nog aanleveren]</p></div></div></div>
+          <div class="qa-a" id="a4" role="region" aria-labelledby="q4"><div><p>Ja, met onze auto’s en bussen mag je door heel Europa rijden. Wil je buiten Europa rijden? Neem dan contact met ons op, dan bekijken we de mogelijkheden.</p></div></div></div>
         <div class="qa"><button type="button" aria-expanded="false" id="q5" aria-controls="a5"><span>Welke extra opties en accessoires kan ik huren?</span><span class="ring"><span class="ico ico-12 i-arrow"></span></span></button>
-          <div class="qa-a" id="a5" role="region" aria-labelledby="q5"><div><p>[Antwoord nog aanleveren]</p></div></div></div>
+          <div class="qa-a" id="a5" role="region" aria-labelledby="q5"><div><p>Je kunt deze opties en accessoires bij je huur bestellen:</p><ul class="opts"><li><span>Trekhaak</span><span>€10 per dag</span></li><li><span>Steekwagen</span><span>€12,50 per dag</span></li><li><span>6-wielige steekwagen</span><span>€18 per dag</span></li><li><span>Palletwagen</span><span>€30 per dag</span></li><li><span>Verhuishondje</span><span>€8 per dag</span></li><li><span>Verhuisdeken</span><span>€3 per stuk per dag</span></li><li><span>Dakdragers of dakkoffer</span><span>Op aanvraag</span></li></ul></div></div></div>
       </div>
     </div>
   </section>
 </main>
 
 <footer class="footer" id="contact">
+<div class="foot-shift">
   <div class="foot-top">
     <div class="foot-left">
       <div>
@@ -705,6 +727,7 @@ body.nav-open { overflow: hidden; }
     <div><span>2026 © All Rent Autoverhuur</span><span>KvK 20101652</span></div>
     <div><a href="#contact">Algemene Voorwaarden</a><a href="#contact">Cookies</a><a href="#contact">Privacy policy</a></div>
   </div>
+</div>
 </footer>
 
 <dialog class="vdialog" id="vdialog" aria-label="Video">
@@ -814,12 +837,27 @@ body.nav-open { overflow: hidden; }
   $('.close', dlg).addEventListener('click', closeDlg);
   dlg.addEventListener('click', e => { if (e.target === dlg) closeDlg(); });
 
-  /* Scroll-reveals in de footer */
+  /* Scroll-reveals: secties faden subtiel in, footer-elementen uit Jitter */
   if ('IntersectionObserver' in window && !reduce) {
     document.documentElement.classList.add('js-reveal');
     $$('.foot-nav .mline > span').forEach((s, i) => s.style.transitionDelay = `${i * 100}ms`);
-    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .2 });
-    $$('[data-reveal]').forEach(el => io.observe(el));
+    $$('[data-fade-stagger]').forEach(l => [...l.children].forEach((c, i) => c.style.transitionDelay = `${i * 80}ms`));
+    $$('.loc-grid > *, .how-grid > *').forEach((c, i, all) => { if (c.matches('[data-fade]')) c.style.transitionDelay = `${(i % 3) * 120}ms`; });
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .15, rootMargin: '0px 0px -8% 0px' });
+    $$('[data-reveal], [data-fade], [data-fade-stagger]').forEach(el => io.observe(el));
+
+    /* Footer-reveal: de footer ligt onder de pagina en schuift mee omhoog terwijl de content wegscrollt */
+    const footer = $('.footer'), shift = $('.foot-shift');
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const r = footer.getBoundingClientRect(), vh = innerHeight, h = r.height;
+      if (r.top > vh || r.bottom < 0) return;
+      const p = Math.min(1, Math.max(0, (vh - r.top) / Math.min(h, vh)));
+      shift.style.transform = `translate3d(0, ${(-(1 - p) * h * 0.3).toFixed(1)}px, 0)`;
+    };
+    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); update();
   }
 
   /* Video's pauzeren buiten beeld en bij reduced motion */
