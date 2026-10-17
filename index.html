@@ -1,0 +1,833 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>All Rent Homepage</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="All Rent Autoverhuur – verhuur van auto’s en bestelbussen in Breda en Roosendaal.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Syncopate:wght@700&display=swap">
+<style>
+/* Layout: Figma-frame van 1512px, 1320px inhoud met 96px marge; secties stapelen met 24px-afgeronde panelen die elkaar overlappen. */
+:root {
+  color-scheme: light;
+  --ink: #262626;
+  --ink-60: rgba(38, 38, 38, 0.8);
+  --line: rgba(38, 38, 38, 0.2);
+  --rule: #e9e9e9;
+  --paper: #ffffff;
+  --mist: #f4f5f6;
+  --red: #ff0f00;
+  --red-dark: #d90d00;
+  --on-dark-line: rgba(255, 255, 255, 0.1);
+  --on-dark-border: rgba(255, 255, 255, 0.2);
+  --white: #ffffff;
+  --font: "Instrument Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --font-logo: "Syncopate", "Arial Black", Arial, sans-serif;
+  --gutter: clamp(16px, 6.35vw, 96px);
+  --content: 1320px;
+  --ease-natural: cubic-bezier(.22, 1, .36, 1);
+  --ease-smooth: cubic-bezier(.65, 0, .35, 1);
+  --ease-slow: cubic-bezier(.16, 1, .3, 1);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--mist);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 16px;
+  letter-spacing: -0.02em;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img, video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; letter-spacing: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+h1, h2, h3, p { margin: 0; }
+h1, h2 { text-wrap: balance; }
+
+.wrap {
+  width: 100%;
+  max-width: calc(var(--content) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+}
+.red { color: var(--red); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Icons: Figma/Streamline SVG's als masker, zodat ze de tekstkleur volgen */
+.ico { display: inline-block; flex: none; width: 24px; height: 24px; background: currentColor;
+  -webkit-mask: var(--src) center / contain no-repeat; mask: var(--src) center / contain no-repeat; }
+.ico-12 { width: 12px; height: 12px; }
+.ico-48 { width: 48px; height: 48px; }
+.i-car { --src: url(assets/icons/car.svg); }
+.i-truck { --src: url(assets/icons/truck.svg); }
+.i-pin { --src: url(assets/icons/pin.svg); }
+.i-cal { --src: url(assets/icons/calendar.svg); }
+.i-clock { --src: url(assets/icons/clock.svg); }
+.i-arrow { --src: url(assets/icons/arrow-right.svg); }
+.i-play { --src: url(assets/icons/play.svg); }
+.i-phone { --src: url(assets/icons/phone.svg); }
+.i-hood { --src: url(assets/icons/car-hood.svg); }
+.i-driver { --src: url(assets/icons/driver.svg); }
+.i-taxi { --src: url(assets/icons/taxi-wave.svg); }
+.i-spark { --src: url(assets/icons/vehicle-spark.svg); }
+
+/* Knoppen */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 16px;
+  border-radius: 4px; font-size: 14px; font-weight: 500; letter-spacing: 0; white-space: nowrap;
+  transition: background-color .2s, border-color .2s, color .2s; }
+.btn-lg { height: 56px; padding: 0 20px; font-size: 16px; font-weight: 600; letter-spacing: -0.02em; }
+.btn-red { background: var(--red); color: var(--white); }
+.btn-red:hover { background: var(--red-dark); }
+.btn-line { border: 1px solid var(--line); color: var(--ink); background: var(--paper); }
+.btn-line:hover { border-color: var(--ink); }
+.btn-line-dark { border: 1px solid var(--on-dark-border); color: var(--white); font-weight: 600; }
+.btn-line-dark:hover { border-color: var(--white); }
+.arrow-ring { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px;
+  border: 1px solid currentColor; border-radius: 999px; flex: none; transition: transform .35s var(--ease-natural); }
+.btn:hover .arrow-ring { transform: translateX(3px); }
+.pill { display: inline-flex; align-items: center; height: 36px; padding: 0 16px; border: 1px solid var(--line);
+  border-radius: 999px; font-size: 14px; font-weight: 500; }
+.h2 { font-size: clamp(34px, 3.2vw + 12px, 48px); font-weight: 600; line-height: 1; letter-spacing: -0.03em; }
+.lead { font-size: clamp(18px, .5vw + 14px, 20px); line-height: 1.4; letter-spacing: -0.03em; }
+
+/* ───────── Navigatie ───────── */
+.nav { position: absolute; z-index: 20; top: calc(32px + env(safe-area-inset-top, 0px)); left: 0; right: 0; }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; height: 44px;
+  padding-left: max(48px, env(safe-area-inset-left, 0px)); padding-right: max(48px, env(safe-area-inset-right, 0px));
+  max-width: 1512px; margin-inline: auto; color: var(--white); }
+.nav-links { display: flex; gap: 24px; font-size: 14px; font-weight: 600; letter-spacing: 0; }
+.nav-links a { position: relative; padding-block: 6px; }
+.nav-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor;
+  transform: scaleX(0); transform-origin: right; transition: transform .4s var(--ease-natural); }
+.nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+.logo { font-family: var(--font-logo); font-weight: 700; font-size: 20px; letter-spacing: 2.4px; line-height: 1; white-space: nowrap; }
+.nav-left, .nav-right { flex: 1 1 0; display: flex; align-items: center; }
+.nav-right { justify-content: flex-end; gap: 24px; }
+.nav-toggle { display: none; width: 44px; height: 44px; align-items: center; justify-content: center; }
+.nav-toggle span, .nav-toggle span::before, .nav-toggle span::after { display: block; width: 22px; height: 2px; background: currentColor;
+  position: relative; transition: transform .3s var(--ease-natural), background-color .2s; }
+.nav-toggle span::before, .nav-toggle span::after { content: ""; position: absolute; left: 0; }
+.nav-toggle span::before { top: -7px; } .nav-toggle span::after { top: 7px; }
+.nav-open .nav-toggle span { background: transparent; }
+.nav-open .nav-toggle span::before { transform: translateY(7px) rotate(45deg); }
+.nav-open .nav-toggle span::after { transform: translateY(-7px) rotate(-45deg); }
+
+.drawer { position: fixed; inset: 0; z-index: 15; background: var(--ink); color: var(--white);
+  padding: calc(120px + env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px)) calc(32px + env(safe-area-inset-bottom, 0px)) max(24px, env(safe-area-inset-left, 0px));
+  display: flex; flex-direction: column; gap: 32px; overflow-y: auto;
+  clip-path: inset(0 0 100% 0); visibility: hidden; transition: clip-path .6s var(--ease-natural), visibility 0s .6s; }
+.nav-open .drawer { clip-path: inset(0); visibility: visible; transition: clip-path .6s var(--ease-natural); }
+.drawer ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+.drawer a.big { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; }
+.drawer .small { font-size: 18px; font-weight: 500; opacity: .8; }
+.drawer .btn { align-self: flex-start; }
+body.nav-open { overflow: hidden; }
+
+/* ───────── Hero ───────── */
+.hero { position: relative; background: var(--ink); color: var(--white); overflow: hidden; }
+.hero-media, .hero-media video, .hero-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 29%; }
+.hero-media::before, .hero-media::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.hero-media::before { background:
+  linear-gradient(125.3deg, rgba(38,38,38,.7) 0%, rgba(38,38,38,.42) 64.22%),
+  linear-gradient(125.3deg, rgba(38,38,38,.7) 0%, rgba(38,38,38,.42) 64.22%); }
+.hero-media::after { top: auto; height: 375px; background: linear-gradient(to bottom, rgba(38,38,38,0), var(--ink)); }
+.hero-inner { position: relative; z-index: 2; min-height: 848px; display: flex; flex-direction: column; justify-content: flex-end;
+  gap: 64px; padding-top: 208px; }
+.hero h1 { font-size: clamp(40px, 3.6vw + 10px, 64px); font-weight: 600; line-height: 1; letter-spacing: -0.03em; }
+.hero .sub { font-size: 20px; line-height: 1; margin-top: 24px; }
+.mline { display: block; overflow: hidden; padding-bottom: .08em; margin-bottom: -.08em; }
+.mline > span { display: block; }
+
+/* Zoekmodule */
+.search { width: 494px; max-width: 100%; }
+.tabs { display: flex; gap: 8px; height: 56px; }
+.tab { display: flex; align-items: center; gap: 8px; padding: 0 24px; border-radius: 4px 4px 0 0; font-weight: 500;
+  background: rgba(255,255,255,.2); color: var(--white); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  transition: background-color .3s, color .3s; }
+.tab[aria-selected="true"] { background: var(--paper); color: var(--ink); }
+.tab:not([aria-selected="true"]):hover { background: rgba(255,255,255,.3); }
+.panel { background: var(--paper); color: var(--ink); padding: 24px; border-radius: 0 4px 4px 4px; display: flex; flex-direction: column; gap: 16px; }
+.field-label { font-size: 14px; font-weight: 600; letter-spacing: 0; line-height: 1; margin-bottom: 12px; display: block; }
+.loc { display: flex; gap: 8px; flex-wrap: wrap; }
+.loc button { display: flex; align-items: center; gap: 8px; height: 56px; padding: 0 24px; border-radius: 4px; font-weight: 500;
+  background: var(--mist); transition: background-color .3s, color .3s; }
+.loc button[aria-pressed="true"] { background: var(--ink); color: var(--white); }
+.loc button:not([aria-pressed="true"]):hover { background: #e8eaec; }
+.dates { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.dt { display: flex; align-items: center; height: 56px; border: 1px solid var(--line); border-radius: 4px; transition: border-color .2s; }
+.dt:hover, .dt:focus-within { border-color: var(--ink); }
+.dt-part { position: relative; flex: 1 1 0; display: flex; align-items: center; gap: 6px; height: 100%; padding-left: 16px; font-weight: 500; min-width: 0; }
+.dt-part + .dt-part { padding-left: 8px; }
+.dt-sep { width: 1px; height: 38px; background: #d9d9d9; flex: none; }
+.dt-part input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; border: 0; padding: 0; }
+.panel .btn-red { width: 100%; gap: 12px; letter-spacing: -0.03em; }
+.help { display: flex; align-items: center; justify-content: center; gap: 12px; padding-top: 8px; font-weight: 500; line-height: 1.3; flex-wrap: wrap; }
+.help a { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+.help a:hover span { text-decoration: underline; text-underline-offset: 3px; }
+.form-note { font-size: 14px; line-height: 1.4; background: var(--mist); border-radius: 4px; padding: 12px 16px; }
+
+/* Video-teaser */
+.video-card { position: absolute; z-index: 3; right: max(var(--gutter), calc((100% - var(--content)) / 2)); bottom: 0; width: 280px;
+  aspect-ratio: 224 / 126; border-radius: 8px; overflow: hidden; color: var(--white); text-align: left; }
+.video-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease-natural); }
+.video-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(14.8deg, rgba(38,38,38,.7) 9.24%, rgba(102,102,102,0) 86.9%); }
+.video-card:hover img { transform: scale(1.06); }
+.video-card .vc-label { position: absolute; z-index: 1; left: 16px; bottom: 16px; display: flex; align-items: center; gap: 8px; line-height: 1; }
+.video-card b { font-weight: 600; }
+.play { display: inline-flex; padding: 6px; border-radius: 999px; background: var(--white); color: var(--ink); }
+
+/* Laadanimatie hero (Jitter: fade 0–800ms, tekst slide+mask) */
+@media (prefers-reduced-motion: no-preference) {
+  .nav, .search { animation: fadeIn .8s linear both; }
+  .video-card { animation: fadeIn .8s linear .27s both; }
+  .hero h1 .mline > span { animation: rise .9s var(--ease-smooth) both; }
+  .hero h1 .mline:nth-child(1) > span { animation-delay: .07s; }
+  .hero h1 .mline:nth-child(2) > span { animation-delay: .17s; }
+  .hero .sub .mline > span { animation: rise .9s var(--ease-slow) .48s both; }
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rise { from { transform: translateY(105%); } to { transform: none; } }
+
+/* ───────── USP's ───────── */
+.usps { background: var(--ink); color: var(--white); }
+.usps .wrap { padding-block: 64px 136px; display: flex; flex-direction: column; gap: 48px; }
+.usps hr { border: 0; height: 1px; background: var(--on-dark-line); margin: 0; }
+.usp-grid { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--on-dark-line); border-radius: 4px; margin-top: 24px; }
+.usp { position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 80px; padding: 32px; min-height: 292px; isolation: isolate; outline-offset: -2px; }
+.usp + .usp { border-left: 1px solid var(--on-dark-line); }
+.usp::before { content: ""; position: absolute; inset: -1px; z-index: -1; background: var(--paper); clip-path: inset(100% 0 0 0);
+  transition: clip-path .7s var(--ease-natural); }
+.usp.is-active::before { clip-path: inset(0); }
+.usp, .usp .ico { transition: color .45s var(--ease-natural); }
+.usp.is-active { color: var(--ink); }
+.usp h3 { font-size: 20px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; text-wrap: balance; }
+.usp p { margin-top: 16px; line-height: 1.4; opacity: .8; }
+
+/* ───────── Witte plaat: Wat wil je huren + Zo werkt 't ───────── */
+.sheet { background: var(--paper); border-radius: 24px; margin-top: -24px; position: relative; z-index: 1; }
+.rent .wrap { padding-block: 112px; display: flex; flex-direction: column; gap: 24px; }
+.rent-head { display: flex; align-items: center; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; }
+.rent-help { display: flex; align-items: center; gap: 16px; font-weight: 500; line-height: 1.3; }
+.rent-help .btn { gap: 8px; }
+.rent-help .ico { color: var(--red); }
+.cards { display: flex; gap: 16px; height: 400px; }
+.card { position: relative; flex: 232 1 0; min-width: 0; border-radius: 8px; overflow: hidden; color: var(--white);
+  transition: flex-grow .8s var(--ease-natural); }
+.card.is-open { flex-grow: 576; }
+.card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease-natural); }
+.card:hover img { transform: scale(1.04); }
+.card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(196deg, rgba(0,0,0,0) 0%, rgba(38,38,38,.8) 92.8%); }
+.card.is-open::after { background: linear-gradient(215.75deg, rgba(0,0,0,0) 0%, rgba(38,38,38,.8) 74.5%); }
+.card-label { position: absolute; z-index: 1; left: 24px; bottom: 24px; font-size: 24px; font-weight: 600; line-height: 1; white-space: nowrap;
+  transition: opacity .3s var(--ease-smooth) .3s; }
+.card-body { position: absolute; z-index: 1; left: 24px; bottom: 24px; width: 408px; max-width: calc(100% - 48px);
+  display: flex; flex-direction: column; align-items: flex-start; gap: 24px; opacity: 0; visibility: hidden;
+  transition: opacity .3s var(--ease-smooth), visibility 0s .3s; }
+.card-body h3 { font-size: 32px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; }
+.card-body p { margin-top: 16px; font-size: 18px; line-height: 1.4; }
+.card.is-open .card-label { opacity: 0; transition-delay: 0s; transition-duration: .2s; }
+.card.is-open .card-body { opacity: 1; visibility: visible; transition: opacity .3s var(--ease-smooth) .5s, visibility 0s .5s; }
+.card-link { position: absolute; inset: 0; z-index: 2; }
+.card-body .btn { position: relative; z-index: 3; }
+
+.how { padding-bottom: 112px; }
+.how .wrap > hr { border: 0; height: 1px; background: var(--rule); margin: 0 0 112px; }
+.how-grid { display: grid; grid-template-columns: 344fr 472fr 344fr; gap: 80px; align-items: center; }
+.how-text { display: flex; flex-direction: column; gap: 40px; }
+.how-text .h2 { margin-top: 16px; }
+.how-text .lead { margin-top: 24px; }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.how-img { border-radius: 8px; overflow: hidden; aspect-ratio: 472 / 629; }
+.how-img img { width: 100%; height: 100%; object-fit: cover; }
+.steps { list-style: none; margin: 0; padding: 0; }
+.step { position: relative; border-bottom: 1px solid var(--rule); }
+.step button { display: flex; align-items: flex-start; gap: 16px; width: 100%; padding: 24px 0; text-align: left; }
+.num { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex: none; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--paper); font-size: 18px; line-height: 1.3; letter-spacing: -0.02em;
+  transition: background-color .4s, color .4s, border-color .4s; }
+.step-title { display: block; font-size: 24px; font-weight: 500; line-height: 1; letter-spacing: -0.02em; padding-top: 10px; }
+.step-desc { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s var(--ease-natural); }
+.step-desc > span { overflow: hidden; }
+.step-desc > span > span { display: block; padding-top: 8px; line-height: 1.3; opacity: .8; }
+.step.is-active .num { background: var(--red); border-color: var(--red); color: var(--white); }
+.step.is-active .step-desc { grid-template-rows: 1fr; }
+.step-bar { position: absolute; left: 0; bottom: -1px; height: 1px; width: 0; background: var(--red); }
+.step:not(:hover) .step-title { transition: color .2s; }
+.step button:hover .step-title { color: var(--red); }
+
+/* ───────── Vestigingen ───────── */
+.locations .wrap { padding-block: 128px; }
+.loc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; }
+.loc-intro { padding-right: 88px; display: flex; flex-direction: column; }
+.loc-intro .h2 { margin-top: 16px; }
+.loc-intro .lead { margin-top: 24px; opacity: .8; }
+.loc-left { display: flex; flex-direction: column; gap: 64px; min-width: 0; }
+.branch { position: relative; height: 440px; border-radius: 8px; overflow: hidden; display: flex; align-items: flex-end; padding: 16px 16px 15.5px; }
+.branch > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 63% 75%; }
+.branch::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(178.8deg, rgba(0,0,0,0) 50%, var(--ink) 98.5%); }
+.branch-list { position: relative; z-index: 2; width: 100%; background: var(--paper); border-radius: 4px; padding: 8px; display: flex; flex-direction: column; gap: 8px; }
+.branch-list hr { border: 0; height: 1px; background: var(--rule); margin: 0; }
+.branch-row { display: grid; grid-template-columns: 77px 107px 144px 1fr 32px; align-items: center; gap: 16px; padding-right: 12px; }
+.branch-row .thumb { width: 77px; height: 58px; border-radius: 2px; overflow: hidden; }
+.branch-row .thumb img { width: 100%; height: 100%; object-fit: cover; }
+.branch-row .name { font-size: 20px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; }
+.branch-row .addr, .branch-row .contact { line-height: 1.3; }
+.branch-row .contact { white-space: nowrap; }
+.wa { display: block; width: 32px; height: 32px; transition: transform .3s var(--ease-natural); }
+.wa:hover { transform: scale(1.12); }
+.loc-media { border-radius: 8px; overflow: hidden; aspect-ratio: 648 / 864; background: var(--ink); }
+.loc-media video, .loc-media img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ───────── FAQ ───────── */
+.faq { background: var(--ink); color: var(--white); border-radius: 24px; margin-top: -16px; position: relative; z-index: 1; }
+.faq .wrap { padding-block: 112px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+.faq-intro { display: flex; flex-direction: column; gap: 24px; padding-right: 88px; }
+.faq-intro .pill { border-color: var(--on-dark-border); align-self: flex-start; }
+.faq-intro .h2 { margin-top: -8px; }
+.faq-intro .lead { opacity: .8; }
+.faq-intro .btn { align-self: flex-start; }
+.qa-list { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.qa { background: var(--paper); color: var(--ink); border-radius: 8px; }
+.qa button { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; padding: 24px; transition-property: color, padding; text-align: left;
+  font-size: 20px; font-weight: 600; line-height: 1.3; letter-spacing: -0.02em; transition: color .25s; }
+.qa button:hover, .qa.is-open button { color: var(--red); }
+.qa .ring { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex: none;
+  border: 1px solid var(--ink); border-radius: 999px; color: var(--ink); }
+.qa .ring .ico { transform: rotate(90deg); transition: transform .45s var(--ease-natural); }
+.qa.is-open .ring .ico { transform: rotate(-90deg); }
+.qa-a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s var(--ease-natural); }
+.qa-a > div { overflow: hidden; }
+.qa-a p { padding: 0 88px 24px 24px; font-size: 18px; line-height: 1.3; letter-spacing: -0.02em; }
+.qa.is-open .qa-a { grid-template-rows: 1fr; }
+.qa.is-open button { padding-bottom: 8px; }
+
+/* ───────── Footer ───────── */
+.footer { background: var(--red); margin-top: -10px; }
+.foot-top { background: var(--mist); border-radius: 0 0 24px 24px; overflow: hidden; display: grid; grid-template-columns: 768fr 744fr; min-height: 866px; max-width: 1512px; margin-inline: auto; }
+.footer { --fpad: max(48px, env(safe-area-inset-left, 0px)); }
+.foot-left { display: flex; flex-direction: column; justify-content: space-between; gap: 48px; padding-top: 96px; min-width: 0; }
+.foot-nav { list-style: none; margin: 0; padding: 0 0 0 var(--fpad); display: flex; flex-direction: column; gap: 24px; }
+.foot-nav a { font-size: 32px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; display: inline-block; transition: color .25s; }
+.foot-nav a:hover { color: var(--red); }
+.foot-branches { display: flex; gap: 112px; padding-left: var(--fpad); margin-top: 80px; flex-wrap: wrap; row-gap: 32px; }
+.foot-branches h3 { font-size: 20px; font-weight: 600; line-height: 1.3; letter-spacing: -0.02em; margin-bottom: 16px; }
+.foot-branches p { line-height: 1.3; }
+.foot-branches p + p { margin-top: 8px; }
+.foot-cta { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 48px; padding-left: var(--fpad); flex-wrap: wrap; }
+.foot-cta p { font-size: 24px; font-weight: 600; line-height: 1.3; }
+.foot-cta .btn { gap: 8px; }
+.foot-img { position: relative; overflow: hidden; min-height: 360px; }
+.foot-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.foot-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; min-height: 80px;
+  max-width: 1512px; margin-inline: auto; padding: 16px max(48px, env(safe-area-inset-right, 0px)) calc(16px + env(safe-area-inset-bottom, 0px)) var(--fpad);
+  color: var(--white); font-size: 14px; line-height: 1.3; }
+.foot-bar div { display: flex; gap: 8px 24px; flex-wrap: wrap; }
+.foot-bar a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Scroll-reveals (Jitter: footer-tekst slide+mask, beeld mask-reveal omlaag, vestigingen slide omhoog) */
+@media (prefers-reduced-motion: no-preference) {
+  .js-reveal .foot-nav .mline > span { transform: translateY(105%); transition: transform .9s var(--ease-slow); }
+  .js-reveal .foot-nav.in .mline > span { transform: none; }
+  .js-reveal .foot-img img { clip-path: inset(0 0 100% 0); transform: scale(1.15); transition: clip-path 1s var(--ease-smooth), transform 1.4s var(--ease-smooth); }
+  .js-reveal .foot-img.in img { clip-path: inset(0); transform: none; }
+  .js-reveal .foot-branches > div { opacity: 0; transform: translateY(40px); transition: opacity .6s var(--ease-slow), transform .6s var(--ease-slow); }
+  .js-reveal .foot-branches.in > div { opacity: 1; transform: none; }
+  .js-reveal .foot-branches.in > div:nth-child(2) { transition-delay: .2s; }
+}
+
+/* Video-dialoog */
+.vdialog { border: 0; padding: 0; background: transparent; max-width: min(1080px, calc(100vw - 32px)); width: 100%; }
+.vdialog::backdrop { background: rgba(38,38,38,.85); }
+.vdialog video { width: 100%; border-radius: 8px; background: #000; }
+.vdialog .close { position: absolute; top: 12px; right: 12px; z-index: 1; width: 40px; height: 40px; border-radius: 999px; background: var(--paper); color: var(--ink); font-size: 22px; line-height: 1; }
+
+/* ───────── Responsive ───────── */
+@media (max-width: 1180px) {
+  .nav-links, .nav-right .btn { display: none; }
+  .nav-toggle { display: inline-flex; }
+  .nav-inner { padding-left: max(var(--gutter), env(safe-area-inset-left, 0px)); padding-right: max(var(--gutter), env(safe-area-inset-right, 0px)); }
+  .nav-left { flex: 0 1 auto; }
+  .nav-right { flex: 0 0 auto; }
+  .usp-grid { grid-template-columns: repeat(2, 1fr); }
+  .usp:nth-child(3) { border-left: 0; }
+  .usp:nth-child(n+3) { border-top: 1px solid var(--on-dark-line); }
+  .how-grid { grid-template-columns: 1fr 1fr; gap: 48px 40px; }
+  .how-text { grid-column: 1 / -1; }
+  .how-text .lead { max-width: 560px; }
+  .loc-grid { grid-template-columns: 1fr; }
+  .loc-intro { padding-right: 0; max-width: 640px; }
+  .loc-media { aspect-ratio: 4 / 3; }
+  .branch-row { grid-template-columns: 77px 1fr 1fr 32px; }
+  .branch-row .name { grid-column: 2 / 4; }
+  .branch-row .thumb { grid-row: span 2; }
+  .branch-row .wa-link { grid-column: 4; grid-row: 1 / span 2; }
+  .faq .wrap { grid-template-columns: 1fr; gap: 48px; }
+  .faq-intro { padding-right: 0; max-width: 640px; }
+  .foot-top { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 860px) {
+  .hero-inner { min-height: 0; padding-top: 140px; gap: 40px; padding-bottom: 32px; }
+  .hero .sub { font-size: 18px; }
+  .video-card { position: relative; right: auto; bottom: auto; display: block; width: auto; max-width: 494px; margin: 0 max(var(--gutter), env(safe-area-inset-right, 0px)) 40px max(var(--gutter), env(safe-area-inset-left, 0px)); animation: none; }
+  .rent .wrap { padding-block: 80px; }
+  .cards { flex-direction: column; height: auto; }
+  .card { flex: none; height: 320px; }
+  .card-label { display: none; }
+  .card-body, .card.is-open .card-body { opacity: 1; visibility: visible; transition: none; }
+  .card::after, .card.is-open::after { background: linear-gradient(200deg, rgba(0,0,0,0) 10%, rgba(38,38,38,.85) 80%); }
+  .card-body h3 { font-size: 28px; }
+  .card-body p { font-size: 16px; }
+  .how { padding-bottom: 80px; }
+  .how .wrap > hr { margin-bottom: 80px; }
+  .how-grid { grid-template-columns: 1fr; }
+  .how-img { aspect-ratio: 4 / 3; }
+  .locations .wrap { padding-block: 80px; }
+  .loc-left { gap: 40px; }
+  .faq .wrap { padding-block: 80px; }
+  .qa button { font-size: 18px; padding: 20px; }
+  .qa-a p { padding: 0 20px 20px; font-size: 16px; }
+  .foot-top { grid-template-columns: 1fr; min-height: 0; }
+  .footer { --fpad: max(var(--gutter), env(safe-area-inset-left, 0px)); }
+  .foot-left { padding-top: 64px; }
+  .foot-nav a { font-size: 26px; }
+  .foot-nav { gap: 18px; }
+  .foot-branches { margin-top: 56px; gap: 32px 56px; }
+  .foot-cta { padding-block: 40px; padding-right: max(var(--gutter), env(safe-area-inset-right, 0px)); }
+  .foot-cta p { font-size: 20px; }
+  .foot-img { min-height: 0; aspect-ratio: 4 / 3; }
+  .foot-bar { padding-right: max(var(--gutter), env(safe-area-inset-right, 0px)); }
+}
+@media (max-width: 600px) {
+  .usps .wrap { padding-block: 48px 96px; gap: 32px; }
+  .usp-grid { grid-template-columns: 1fr; }
+  .usp + .usp { border-left: 0; border-top: 1px solid var(--on-dark-line); }
+  .usp { min-height: 0; gap: 40px; padding: 24px; }
+  .rent-head .rent-help { width: 100%; justify-content: space-between; }
+  .card { height: 300px; }
+  .branch { height: auto; min-height: 440px; padding: 12px; }
+  .branch-row { grid-template-columns: 64px 1fr 32px; gap: 8px 12px; padding-right: 4px; }
+  .branch-row .thumb { width: 64px; height: 48px; grid-row: auto; }
+  .branch-row .name { grid-column: 2; }
+  .branch-row .wa-link { grid-column: 3; grid-row: 1; }
+  .branch-row .thumb { grid-row: 1; }
+  .branch-row .addr, .branch-row .contact { grid-column: 1 / -1; font-size: 15px; }
+  .branch-row .contact { white-space: normal; }
+  .loc-media { aspect-ratio: 3 / 4; }
+}
+@media (max-width: 480px) {
+  .tab { padding: 0 18px; }
+  .panel { padding: 16px; }
+  .loc button { flex: 1 1 0; padding: 0 16px; justify-content: center; }
+  .dates { grid-template-columns: 1fr; }
+  .logo { font-size: 17px; letter-spacing: 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="top">
+  <div class="nav-inner">
+    <nav class="nav-left" aria-label="Aanbod">
+      <div class="nav-links">
+        <a href="#huren">Bus huren</a>
+        <a href="#huren">Personenauto huren</a>
+        <a href="#huren">Short lease</a>
+        <a href="#huren">Wagenpark</a>
+      </div>
+      <a class="logo" href="#top" aria-label="All Rent, naar boven" data-mobile-logo hidden>ALL RENT</a>
+    </nav>
+    <a class="logo" href="#top" aria-label="All Rent, naar boven" data-desk-logo>ALL RENT</a>
+    <div class="nav-right">
+      <nav class="nav-links" aria-label="Over All Rent">
+        <a href="#vestigingen">Vestigingen</a>
+        <a href="#over-ons">Over ons</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a class="btn btn-red" href="#reserveren">Reserveer direct <span class="arrow-ring" style="width:26px;height:26px"><span class="ico ico-12 i-arrow"></span></span></a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="drawer"><span></span><span class="sr-only">Menu</span></button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="drawer" aria-label="Menu">
+  <ul>
+    <li><a class="big" href="#huren">Bus huren</a></li>
+    <li><a class="big" href="#huren">Personenauto huren</a></li>
+    <li><a class="big" href="#huren">Short lease</a></li>
+    <li><a class="big" href="#huren">Wagenpark</a></li>
+  </ul>
+  <ul>
+    <li><a class="small" href="#vestigingen">Vestigingen</a></li>
+    <li><a class="small" href="#over-ons">Over ons</a></li>
+    <li><a class="small" href="#contact">Contact</a></li>
+  </ul>
+  <a class="btn btn-red btn-lg" href="#reserveren">Reserveer direct <span class="arrow-ring"><span class="ico ico-12 i-arrow"></span></span></a>
+</div>
+
+<main>
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-media" aria-hidden="true">
+      <video autoplay muted loop playsinline preload="metadata" poster="assets/hero.jpg">
+        <source src="assets/hero.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="wrap hero-inner">
+      <div>
+        <h1 id="hero-title"><span class="mline"><span>Verhuur van auto’s</span></span><span class="mline"><span>en bestelbussen.</span></span></h1>
+        <p class="sub"><span class="mline"><span>Zonder gedoe, voor een scherpe prijs.</span></span></p>
+      </div>
+
+      <form class="search" id="reserveren" novalidate>
+        <div class="tabs" role="tablist" aria-label="Type voertuig">
+          <button type="button" class="tab" role="tab" aria-selected="true" data-type="Auto"><span class="ico i-car"></span>Auto</button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-type="Bestelbus"><span class="ico i-truck"></span>Bestelbus</button>
+        </div>
+        <div class="panel">
+          <div>
+            <span class="field-label" id="loc-label">Ophalen en inleveren in</span>
+            <div class="loc" role="group" aria-labelledby="loc-label">
+              <button type="button" aria-pressed="true" data-loc="Breda"><span class="ico i-pin"></span>Breda</button>
+              <button type="button" aria-pressed="false" data-loc="Roosendaal"><span class="ico i-pin"></span>Roosendaal</button>
+            </div>
+          </div>
+          <div class="dates">
+            <div>
+              <span class="field-label">Ophaaldatum</span>
+              <div class="dt">
+                <label class="dt-part"><span class="ico i-cal"></span><span data-out="pickup-date">17 okt</span><input type="date" id="pickup-date" aria-label="Ophaaldatum"></label>
+                <span class="dt-sep"></span>
+                <label class="dt-part"><span class="ico i-clock"></span><span data-out="pickup-time">09:00</span><input type="time" id="pickup-time" value="09:00" step="900" aria-label="Ophaaltijd"></label>
+              </div>
+            </div>
+            <div>
+              <span class="field-label">Inleverdatum</span>
+              <div class="dt">
+                <label class="dt-part"><span class="ico i-cal"></span><span data-out="return-date">19 okt</span><input type="date" id="return-date" aria-label="Inleverdatum"></label>
+                <span class="dt-sep"></span>
+                <label class="dt-part"><span class="ico i-clock"></span><span data-out="return-time">17:30</span><input type="time" id="return-time" value="17:30" step="900" aria-label="Inlevertijd"></label>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-red btn-lg" type="submit">Reserveer direct <span class="arrow-ring"><span class="ico ico-12 i-arrow"></span></span></button>
+          <p class="form-note" role="status" hidden></p>
+          <div class="help">
+            <span>Heb je hulp nodig?</span>
+            <a href="https://wa.me/31765879225"><img src="assets/icons/whatsapp.svg" width="24" height="24" alt=""><span>WhatsApp met ons</span></a>
+          </div>
+        </div>
+      </form>
+    </div>
+    <button class="video-card" type="button" data-open-video>
+      <img src="assets/video-thumb.jpg" alt="">
+      <span class="vc-label"><span><b>Bekijk de video</b> (1:26)</span><span class="play"><span class="ico ico-12 i-play"></span></span></span>
+    </button>
+  </section>
+
+  <!-- USP's -->
+  <section class="usps" aria-labelledby="usp-title">
+    <div class="wrap">
+      <hr>
+      <div>
+        <h2 class="h2" id="usp-title">Waarom kiezen voor<br><span class="red">All Rent</span> Autoverhuur?</h2>
+        <div class="usp-grid">
+          <article class="usp" tabindex="0"><span class="ico ico-48 i-hood"></span><div><h3>24/7 pechhulp in Europa</h3><p>Bij pech of schade onderweg ben je verzekerd van hulp.</p></div></article>
+          <article class="usp" tabindex="0"><span class="ico ico-48 i-driver"></span><div><h3>Kosteloos meerdere bestuurders</h3><p>Handig voor lange ritten, verhuizingen of zakelijke huur.</p></div></article>
+          <article class="usp is-active" tabindex="0"><span class="ico ico-48 i-taxi"></span><div><h3>Haal- en brengservice in heel Nederland</h3><p>Laat je huurauto of bus bezorgen of ophalen waar nodig.</p></div></article>
+          <article class="usp" tabindex="0"><span class="ico ico-48 i-spark"></span><div><h3>Jonge en representatieve auto’s</h3><p>Betrouwbaar onderweg met een goed onderhouden voertuig.</p></div></article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sheet">
+    <!-- Wat wil je huren -->
+    <section class="rent" id="huren" aria-labelledby="rent-title">
+      <div class="wrap">
+        <div class="rent-head">
+          <h2 class="h2" id="rent-title">Wat wil je huren?</h2>
+          <div class="rent-help"><span>Heb je hulp nodig?</span><a class="btn btn-line btn-lg" href="tel:+31765879225"><span class="ico i-phone"></span>Bel met ons</a></div>
+        </div>
+        <div class="cards">
+          <article class="card is-open">
+            <img src="assets/card-bus.jpg" alt="" style="object-position:50% 100%">
+            <span class="card-label" aria-hidden="true">Bus huren</span>
+            <div class="card-body"><div><h3>Bus huren</h3><p>Bestelbus of verhuisbus nodig? Kies het formaat dat past bij jouw klus.</p></div><a class="btn btn-red" href="#reserveren">Bekijk onze bussen</a></div>
+          </article>
+          <article class="card">
+            <img src="assets/card-auto.jpg" alt="" style="object-position:38% 0%">
+            <span class="card-label" aria-hidden="true">Personenauto</span>
+            <div class="card-body"><div><h3>Personenauto</h3><p>Voor een dagje weg, een zakenreis of als vervangend vervoer.</p></div><a class="btn btn-red" href="#reserveren">Bekijk onze auto’s</a></div>
+          </article>
+          <article class="card">
+            <img src="assets/card-shortlease.jpg" alt="">
+            <span class="card-label" aria-hidden="true">Shortlease</span>
+            <div class="card-body"><div><h3>Shortlease</h3><p>Een auto of bus voor een paar maanden, zonder lang vast te zitten.</p></div><a class="btn btn-red" href="#reserveren">Bekijk shortlease</a></div>
+          </article>
+          <article class="card">
+            <img src="assets/card-wagenpark.jpg" alt="" style="object-position:14% 100%">
+            <span class="card-label" aria-hidden="true">Ons wagenpark</span>
+            <div class="card-body"><div><h3>Ons wagenpark</h3><p>Bekijk alle auto’s, bestelbussen en personenbussen die we verhuren.</p></div><a class="btn btn-red" href="#reserveren">Bekijk het wagenpark</a></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Zo werkt 't -->
+    <section class="how" id="over-ons" aria-labelledby="how-title">
+      <div class="wrap">
+        <hr>
+        <div class="how-grid">
+          <div class="how-text">
+            <div>
+              <span class="pill">Zo werkt ‘t</span>
+              <h2 class="h2" id="how-title">Zo werkt huren bij <span class="red">All Rent</span>.</h2>
+              <p class="lead">In een paar stappen regel je eenvoudig jouw huurauto of bus. Kies wat je nodig hebt, check de beschikbaarheid en reserveer direct.</p>
+            </div>
+            <div class="btn-row">
+              <a class="btn btn-red btn-lg" href="#reserveren" data-type-link="Bestelbus">Reserveer een bus</a>
+              <a class="btn btn-line btn-lg" href="#reserveren" data-type-link="Auto">Reserveer een auto</a>
+            </div>
+          </div>
+          <div class="how-img"><img src="assets/how.jpg" alt="Medewerker van All Rent aan het werk achter de computer" loading="lazy"></div>
+          <ol class="steps">
+            <li class="step"><button type="button"><span class="num">1</span><span><span class="step-title">Kies je voertuig</span></span></button><span class="step-bar"></span></li>
+            <li class="step is-active"><button type="button"><span class="num">2</span><span><span class="step-title">Kies vestiging en datum</span><span class="step-desc"><span><span>Bepaal jouw ophaallocatie, Breda of Roosendaal. Kies een datum en tijd.</span></span></span></span></button><span class="step-bar"></span></li>
+            <li class="step"><button type="button"><span class="num">3</span><span><span class="step-title">Bekijk beschikbaarheid</span></span></button><span class="step-bar"></span></li>
+            <li class="step"><button type="button"><span class="num">4</span><span><span class="step-title">Reserveer en rijd weg</span></span></button><span class="step-bar"></span></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Vestigingen -->
+  <section class="locations" id="vestigingen" aria-labelledby="loc-title">
+    <div class="wrap loc-grid">
+      <div class="loc-left">
+        <div class="loc-intro">
+          <span class="pill" style="align-self:flex-start">Vestigingen</span>
+          <h2 class="h2" id="loc-title">Altijd dichtbij in<br><span class="red">Breda</span> en <span class="red">Roosendaal</span></h2>
+          <p class="lead">Huur eenvoudig een personenauto, bestelbus of personenbus en kies de locatie die het beste past bij jouw rit. Particulier of zakelijk, kort of lang: je bent snel op weg.</p>
+        </div>
+        <div class="branch">
+          <img src="assets/branch-breda.jpg" alt="Vestiging All Rent Breda" loading="lazy">
+          <div class="branch-list">
+            <div class="branch-row">
+              <div class="thumb"><img src="assets/thumb-breda.jpg" alt="" style="object-position:50% 4%"></div>
+              <p class="name">All Rent<br><span class="red">Breda</span></p>
+              <p class="addr">Franse Akker 15<br>4824 AL Breda</p>
+              <p class="contact">+31 076 587 92 25<br>breda@all-rent.nl</p>
+              <a class="wa-link" href="https://wa.me/31765879225" aria-label="WhatsApp All Rent Breda"><img class="wa" src="assets/icons/whatsapp.svg" alt="" width="32" height="32"></a>
+            </div>
+            <hr>
+            <div class="branch-row">
+              <div class="thumb"><img src="assets/thumb-roosendaal.jpg" alt=""></div>
+              <p class="name">All Rent<br><span class="red">Roosendaal</span></p>
+              <p class="addr">Belder 96-H<br>4704RK Roosendaal</p>
+              <p class="contact">+31 0165 54 57 11<br>roosendaal@all-rent.nl</p>
+              <a class="wa-link" href="https://wa.me/31165545711" aria-label="WhatsApp All Rent Roosendaal"><img class="wa" src="assets/icons/whatsapp.svg" alt="" width="32" height="32"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="loc-media">
+        <video autoplay muted loop playsinline preload="metadata" poster="assets/branch-roosendaal.jpg" aria-label="Vestiging All Rent Roosendaal">
+          <source src="assets/branch.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" aria-labelledby="faq-title">
+    <div class="wrap">
+      <div class="faq-intro">
+        <span class="pill">FAQ</span>
+        <h2 class="h2" id="faq-title">Veelgestelde vragen</h2>
+        <p class="lead">In een paar stappen regel je eenvoudig jouw huurauto of bus. Kies wat je nodig hebt, check de beschikbaarheid en reserveer direct.</p>
+        <a class="btn btn-line-dark" href="#faq-title">Bekijk alle vragen</a>
+      </div>
+      <div class="qa-list">
+        <div class="qa"><button type="button" aria-expanded="false" id="q1" aria-controls="a1"><span>Ophalen en terugbrengen van de huurauto of -bus?</span><span class="ring"><span class="ico ico-12 i-arrow"></span></span></button>
+          <div class="qa-a" id="a1" role="region" aria-labelledby="q1"><div><p>[Antwoord nog aanleveren]</p></div></div></div>
+        <div class="qa is-open"><button type="button" aria-expanded="true" id="q2" aria-controls="a2"><span>Hoe werkt de borg?</span><span class="ring"><span class="ico ico-12 i-arrow"></span></span></button>
+          <div class="qa-a" id="a2" role="region" aria-labelledby="q2"><div><p>Voor huurperiodes van 1 tot 3 dagen geldt een borg van €750. Deze betaal je met pin of creditcard (geen contant). Na inlevering van de auto of bus verrekenen we de huurkosten, extra kilometers en brandstof. Het restant storten we binnen twee werkdagen terug.</p></div></div></div>
+        <div class="qa"><button type="button" aria-expanded="false" id="q3" aria-controls="a3"><span>Wat is een all-in prijs?</span><span class="ring"><span class="ico ico-12 i-arrow"></span></span></button>
+          <div class="qa-a" id="a3" role="region" aria-labelledby="q3"><div><p>[Antwoord nog aanleveren]</p></div></div></div>
+        <div class="qa"><button type="button" aria-expanded="false" id="q4" aria-controls="a4"><span>Mag ik met de huurauto naar het buitenland?</span><span class="ring"><span class="ico ico-12 i-arrow"></span></span></button>
+          <div class="qa-a" id="a4" role="region" aria-labelledby="q4"><div><p>[Antwoord nog aanleveren]</p></div></div></div>
+        <div class="qa"><button type="button" aria-expanded="false" id="q5" aria-controls="a5"><span>Welke extra opties en accessoires kan ik huren?</span><span class="ring"><span class="ico ico-12 i-arrow"></span></span></button>
+          <div class="qa-a" id="a5" role="region" aria-labelledby="q5"><div><p>[Antwoord nog aanleveren]</p></div></div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer" id="contact">
+  <div class="foot-top">
+    <div class="foot-left">
+      <div>
+        <ul class="foot-nav" data-reveal>
+          <li><a href="#huren"><span class="mline"><span>Bus huren</span></span></a></li>
+          <li><a href="#huren"><span class="mline"><span>Personenauto huren</span></span></a></li>
+          <li><a href="#huren"><span class="mline"><span>Bestelbus huren</span></span></a></li>
+          <li><a href="#huren"><span class="mline"><span>Personenbus huren</span></span></a></li>
+          <li><a href="#huren"><span class="mline"><span>Shortlease</span></span></a></li>
+          <li><a href="#huren"><span class="mline"><span>Wagenpark</span></span></a></li>
+          <li><a href="#huren"><span class="mline"><span>Opties &amp; Accessoires</span></span></a></li>
+        </ul>
+        <div class="foot-branches" data-reveal>
+          <div><h3>All Rent <span class="red">Breda</span></h3><p>Franse Akker 15<br>4824 AL Breda</p><p>+31 076 587 92 25<br>breda@all-rent.nl</p></div>
+          <div><h3>All Rent <span class="red">Roosendaal</span></h3><p>Belder 96-H<br>4704RK Roosendaal</p><p>+31 0165 54 57 11<br>roosendaal@all-rent.nl</p></div>
+        </div>
+      </div>
+      <div class="foot-cta">
+        <p>Verhuur van auto’s en bestelbussen.</p>
+        <a class="btn btn-red btn-lg" href="#reserveren">Reserveer direct <span class="arrow-ring"><span class="ico ico-12 i-arrow"></span></span></a>
+      </div>
+    </div>
+    <div class="foot-img" data-reveal><img src="assets/footer.jpg" alt="Twee medewerkers van All Rent voor de vestiging" loading="lazy"></div>
+  </div>
+  <div class="foot-bar">
+    <div><span>2026 © All Rent Autoverhuur</span><span>KvK 20101652</span></div>
+    <div><a href="#contact">Algemene Voorwaarden</a><a href="#contact">Cookies</a><a href="#contact">Privacy policy</a></div>
+  </div>
+</footer>
+
+<dialog class="vdialog" id="vdialog" aria-label="Video">
+  <button class="close" type="button" aria-label="Sluiten">×</button>
+  <video controls playsinline preload="none" src="assets/hero.mp4"></video>
+</dialog>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Mobiel menu */
+  const toggle = $('.nav-toggle');
+  const mq = matchMedia('(max-width: 1180px)');
+  const syncLogo = () => { $('[data-mobile-logo]').hidden = !mq.matches; $('[data-desk-logo]').hidden = mq.matches; };
+  syncLogo(); mq.addEventListener('change', syncLogo);
+  const setNav = open => { document.body.classList.toggle('nav-open', open); toggle.setAttribute('aria-expanded', open); };
+  toggle.addEventListener('click', () => setNav(!document.body.classList.contains('nav-open')));
+  $$('#drawer a').forEach(a => a.addEventListener('click', () => setNav(false)));
+  addEventListener('keydown', e => { if (e.key === 'Escape') setNav(false); });
+
+  /* Zoekmodule */
+  const tabs = $$('.tab');
+  const setType = t => tabs.forEach(b => b.setAttribute('aria-selected', b.dataset.type === t));
+  tabs.forEach(b => b.addEventListener('click', () => setType(b.dataset.type)));
+  $$('[data-type-link]').forEach(a => a.addEventListener('click', () => setType(a.dataset.typeLink)));
+  const locs = $$('.loc button');
+  locs.forEach(b => b.addEventListener('click', () => locs.forEach(x => x.setAttribute('aria-pressed', x === b))));
+
+  const fmt = d => d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' }).replace('.', '');
+  const iso = d => new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+  const today = new Date(); const later = new Date(); later.setDate(today.getDate() + 2);
+  const pd = $('#pickup-date'), rd = $('#return-date');
+  pd.value = iso(today); pd.min = iso(today); rd.value = iso(later); rd.min = iso(today);
+  const out = id => $(`[data-out="${id}"]`);
+  const paint = () => {
+    out('pickup-date').textContent = fmt(new Date(pd.value + 'T12:00'));
+    out('return-date').textContent = fmt(new Date(rd.value + 'T12:00'));
+    out('pickup-time').textContent = $('#pickup-time').value;
+    out('return-time').textContent = $('#return-time').value;
+  };
+  paint();
+  $$('.dt input').forEach(i => {
+    i.addEventListener('input', () => {
+      if (rd.value < pd.value) rd.value = pd.value;
+      rd.min = pd.value; paint();
+    });
+    i.addEventListener('click', () => { try { i.showPicker(); } catch (e) {} });
+  });
+  $('#reserveren').addEventListener('submit', e => {
+    e.preventDefault();
+    const type = $('.tab[aria-selected="true"]').dataset.type;
+    const loc = $('.loc button[aria-pressed="true"]').dataset.loc;
+    const note = $('.form-note');
+    note.textContent = `${type} in ${loc}, van ${out('pickup-date').textContent} ${out('pickup-time').textContent} tot ${out('return-date').textContent} ${out('return-time').textContent}. In deze testversie is het reserveringssysteem nog niet gekoppeld.`;
+    note.hidden = false;
+  });
+
+  /* USP-hover: witte vlak schuift van onder in, en weer naar beneden uit */
+  const usps = $$('.usp');
+  const setUsp = u => usps.forEach(x => x.classList.toggle('is-active', x === u));
+  usps.forEach(u => { u.addEventListener('mouseenter', () => setUsp(u)); u.addEventListener('focus', () => setUsp(u)); u.addEventListener('click', () => setUsp(u)); });
+
+  /* Huurkaarten: kaart klapt open bij hover/focus */
+  const cards = $$('.card');
+  const setCard = c => cards.forEach(x => x.classList.toggle('is-open', x === c));
+  cards.forEach(c => { c.addEventListener('mouseenter', () => setCard(c)); c.addEventListener('focusin', () => setCard(c)); });
+
+  /* Zo werkt 't: stappen lopen automatisch door met voortgangslijn */
+  const steps = $$('.step');
+  let cur = 1, timer = null, running = false;
+  const DUR = 4000;
+  const activate = (i, auto) => {
+    cur = i;
+    steps.forEach((s, n) => {
+      s.classList.toggle('is-active', n === i);
+      const bar = $('.step-bar', s);
+      bar.style.transition = 'none'; bar.style.width = '0';
+    });
+    clearTimeout(timer);
+    if (!auto || reduce) return;
+    const bar = $('.step-bar', steps[i]);
+    requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.transition = `width ${DUR}ms linear`; bar.style.width = '100%'; }));
+    timer = setTimeout(() => activate((i + 1) % steps.length, true), DUR + 300);
+  };
+  steps.forEach((s, n) => $('button', s).addEventListener('click', () => { running = false; activate(n, false); }));
+  if ('IntersectionObserver' in window && !reduce) {
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !running) { running = true; activate(cur, true); }
+      else if (!e.isIntersecting && running) { running = false; activate(cur, false); }
+    }, { threshold: .4 }).observe($('.steps'));
+  }
+
+  /* FAQ-accordeon */
+  $$('.qa button').forEach(b => b.addEventListener('click', () => {
+    const qa = b.closest('.qa'); const open = !qa.classList.contains('is-open');
+    $$('.qa').forEach(x => { x.classList.remove('is-open'); $('button', x).setAttribute('aria-expanded', 'false'); });
+    qa.classList.toggle('is-open', open); b.setAttribute('aria-expanded', open);
+  }));
+
+  /* Video-dialoog */
+  const dlg = $('#vdialog'), dv = $('video', dlg);
+  $('[data-open-video]').addEventListener('click', () => { if (dlg.showModal) { dlg.showModal(); dv.play().catch(() => {}); } });
+  const closeDlg = () => { dv.pause(); dlg.close(); };
+  $('.close', dlg).addEventListener('click', closeDlg);
+  dlg.addEventListener('click', e => { if (e.target === dlg) closeDlg(); });
+
+  /* Scroll-reveals in de footer */
+  if ('IntersectionObserver' in window && !reduce) {
+    document.documentElement.classList.add('js-reveal');
+    $$('.foot-nav .mline > span').forEach((s, i) => s.style.transitionDelay = `${i * 100}ms`);
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .2 });
+    $$('[data-reveal]').forEach(el => io.observe(el));
+  }
+
+  /* Video's pauzeren buiten beeld en bij reduced motion */
+  $$('main video[autoplay]').forEach(v => {
+    if (reduce) { v.removeAttribute('autoplay'); v.pause(); return; }
+    if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => e.isIntersecting ? v.play().catch(() => {}) : v.pause()).observe(v);
+  });
+})();
+</script>
+</body>
+</html>
