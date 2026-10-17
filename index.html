@@ -566,7 +566,7 @@ main { position: relative; z-index: 1; }
         <div class="usp-grid" data-fade>
           <article class="usp" tabindex="0"><span class="ico ico-48 i-hood"></span><div><h3>24/7 pechhulp in Europa</h3><p>Bij pech of schade onderweg ben je verzekerd van hulp.</p></div></article>
           <article class="usp" tabindex="0"><span class="ico ico-48 i-driver"></span><div><h3>Kosteloos meerdere bestuurders</h3><p>Handig voor lange ritten, verhuizingen of zakelijke huur.</p></div></article>
-          <article class="usp is-active" tabindex="0"><span class="ico ico-48 i-taxi"></span><div><h3>Haal- en brengservice in heel Nederland</h3><p>Laat je huurauto of bus bezorgen of ophalen waar nodig.</p></div></article>
+          <article class="usp" tabindex="0"><span class="ico ico-48 i-taxi"></span><div><h3>Haal- en brengservice in heel Nederland</h3><p>Laat je huurauto of bus bezorgen of ophalen waar nodig.</p></div></article>
           <article class="usp" tabindex="0"><span class="ico ico-48 i-spark"></span><div><h3>Jonge en representatieve auto’s</h3><p>Betrouwbaar onderweg met een goed onderhouden voertuig.</p></div></article>
         </div>
       </div>
@@ -624,8 +624,8 @@ main { position: relative; z-index: 1; }
           </div>
           <div class="how-img" data-fade><img src="assets/how.jpg" alt="Medewerker van All Rent aan het werk achter de computer" loading="lazy"></div>
           <ol class="steps" data-fade-stagger>
-            <li class="step"><button type="button"><span class="num">1</span><span><span class="step-title">Kies je voertuig</span><span class="step-desc"><span><span>Een personenauto, bestelbus of personenbus: kies wat past bij jouw rit of klus.</span></span></span></span></button><span class="step-bar"></span></li>
-            <li class="step is-active"><button type="button"><span class="num">2</span><span><span class="step-title">Kies vestiging en datum</span><span class="step-desc"><span><span>Bepaal jouw ophaallocatie, Breda of Roosendaal. Kies een datum en tijd.</span></span></span></span></button><span class="step-bar"></span></li>
+            <li class="step is-active"><button type="button"><span class="num">1</span><span><span class="step-title">Kies je voertuig</span><span class="step-desc"><span><span>Een personenauto, bestelbus of personenbus: kies wat past bij jouw rit of klus.</span></span></span></span></button><span class="step-bar"></span></li>
+            <li class="step"><button type="button"><span class="num">2</span><span><span class="step-title">Kies vestiging en datum</span><span class="step-desc"><span><span>Bepaal jouw ophaallocatie, Breda of Roosendaal. Kies een datum en tijd.</span></span></span></span></button><span class="step-bar"></span></li>
             <li class="step"><button type="button"><span class="num">3</span><span><span class="step-title">Bekijk beschikbaarheid</span><span class="step-desc"><span><span>Je ziet direct welke voertuigen vrij zijn, met een all-in prijs zonder verrassingen.</span></span></span></span></button><span class="step-bar"></span></li>
             <li class="step"><button type="button"><span class="num">4</span><span><span class="step-title">Reserveer en rijd weg</span><span class="step-desc"><span><span>Rond je reservering online af. Op de afgesproken dag staat jouw voertuig klaar.</span></span></span></span></button><span class="step-bar"></span></li>
           </ol>
@@ -791,7 +791,8 @@ main { position: relative; z-index: 1; }
   /* USP-hover: witte vlak schuift van onder in, en weer naar beneden uit */
   const usps = $$('.usp');
   const setUsp = u => usps.forEach(x => x.classList.toggle('is-active', x === u));
-  usps.forEach(u => { u.addEventListener('mouseenter', () => setUsp(u)); u.addEventListener('focus', () => setUsp(u)); u.addEventListener('click', () => setUsp(u)); });
+  usps.forEach(u => { u.addEventListener('mouseenter', () => setUsp(u)); u.addEventListener('focus', () => setUsp(u)); u.addEventListener('click', () => setUsp(u)); u.addEventListener('blur', () => setUsp(null)); });
+  $('.usp-grid').addEventListener('mouseleave', () => setUsp(null));
 
   /* Huurkaarten: kaart klapt open bij hover/focus */
   const cards = $$('.card');
@@ -800,7 +801,7 @@ main { position: relative; z-index: 1; }
 
   /* Zo werkt 't: stappen lopen automatisch door met voortgangslijn */
   const steps = $$('.step');
-  let cur = 1, timer = null, running = false;
+  let cur = 0, timer = null, running = false;
   const DUR = 4000;
   const activate = (i, auto) => {
     cur = i;
