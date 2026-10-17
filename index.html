@@ -283,13 +283,14 @@ body.nav-open { overflow: hidden; }
 .branch-row .name { font-size: 20px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; }
 .branch-row .addr, .branch-row .contact { line-height: 1.3; }
 .branch-row .contact, .branch-row .addr { white-space: nowrap; }
+.branch-row .details { display: contents; }
 .wa { display: block; width: 32px; height: 32px; transition: transform .3s var(--ease-natural); }
 .wa:hover { transform: scale(1.12); }
 .loc-media { border-radius: 8px; overflow: hidden; aspect-ratio: 648 / 864; background: var(--ink); }
 .loc-media video, .loc-media img { width: 100%; height: 100%; object-fit: cover; }
 
 /* ───────── FAQ ───────── */
-.faq { background: var(--ink); color: var(--white); border-radius: 24px; margin-top: -16px; position: relative; z-index: 1; box-shadow: 0 24px 48px -24px rgba(38,38,38,.35); }
+.faq { background: var(--ink); color: var(--white); border-radius: 24px; margin-top: -16px; position: relative; z-index: 1; }
 .faq .wrap { padding-block: 112px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
 .faq-intro { display: flex; flex-direction: column; gap: 24px; padding-right: 88px; }
 .faq-intro .pill { border-color: var(--on-dark-border); align-self: flex-start; }
@@ -427,7 +428,22 @@ main { position: relative; z-index: 1; }
 }
 @media (max-width: 600px) {
   .nav-right .btn { display: none; }
-  .foot-branches { flex-direction: column; gap: 32px; }
+  .rent-head { display: contents; }
+  .rent-head .h2 { order: 0; }
+  .cards { order: 1; }
+  .rent-help { order: 2; margin-top: 8px; }
+  .how .btn-row { flex-wrap: nowrap; }
+  .how .btn-row .btn { flex: 1 1 0; min-width: 0; padding: 0 10px; font-size: 15px; }
+  .foot-left { padding-top: 48px; gap: 0; }
+  .foot-nav { display: grid; grid-template-columns: max-content max-content; justify-content: space-between; gap: 14px 16px; padding-right: max(var(--gutter), env(safe-area-inset-right, 0px)); }
+  .foot-nav a { font-size: clamp(15px, 4.3vw, 18px); white-space: nowrap; }
+  .foot-branches { flex-wrap: nowrap; gap: 16px; margin-top: 40px; }
+  .foot-branches > div { flex: 1 1 0; min-width: 0; }
+  .foot-branches h3 { font-size: 17px; margin-bottom: 8px; }
+  .foot-branches p { font-size: 14px; overflow-wrap: anywhere; }
+  .foot-cta { padding-block: 32px; gap: 16px; }
+  .foot-cta p { font-size: 18px; }
+  .foot-img { aspect-ratio: 2 / 1; }
   .usps .wrap { padding-block: 48px 96px; gap: 32px; }
   .usp-grid { grid-template-columns: 1fr; }
   .usp + .usp { border-left: 0; border-top: 1px solid var(--on-dark-line); }
@@ -440,8 +456,8 @@ main { position: relative; z-index: 1; }
   .branch-row .name { grid-column: 2; }
   .branch-row .wa-link { grid-column: 3; grid-row: 1; }
   .branch-row .thumb { grid-row: 1; }
-  .branch-row .addr, .branch-row .contact { grid-column: 1 / -1; font-size: 15px; }
-  .branch-row .contact { white-space: normal; }
+  .branch-row .details { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1.25fr; gap: 12px; font-size: 14px; }
+  .branch-row .addr, .branch-row .contact { white-space: normal; overflow-wrap: anywhere; }
   .loc-media { aspect-ratio: 3 / 4; }
 }
 @media (max-width: 480px) {
@@ -649,16 +665,16 @@ main { position: relative; z-index: 1; }
             <div class="branch-row">
               <div class="thumb"><img src="assets/thumb-breda.jpg" alt="" style="object-position:50% 4%"></div>
               <p class="name">All Rent<br><span class="red">Breda</span></p>
-              <p class="addr">Franse Akker 15<br>4824 AL Breda</p>
-              <p class="contact">+31 076 587 92 25<br>breda@all-rent.nl</p>
+              <div class="details"><p class="addr">Franse Akker 15<br>4824 AL Breda</p>
+              <p class="contact">+31 076 587 92 25<br>breda@all-rent.nl</p></div>
               <a class="wa-link" href="https://wa.me/31765879225" aria-label="WhatsApp All Rent Breda"><img class="wa" src="assets/icons/whatsapp.svg" alt="" width="32" height="32"></a>
             </div>
             <hr>
             <div class="branch-row">
               <div class="thumb"><img src="assets/thumb-roosendaal.jpg" alt=""></div>
               <p class="name">All Rent<br><span class="red">Roosendaal</span></p>
-              <p class="addr">Belder 96-H<br>4704RK Roosendaal</p>
-              <p class="contact">+31 0165 54 57 11<br>roosendaal@all-rent.nl</p>
+              <div class="details"><p class="addr">Belder 96-H<br>4704RK Roosendaal</p>
+              <p class="contact">+31 0165 54 57 11<br>roosendaal@all-rent.nl</p></div>
               <a class="wa-link" href="https://wa.me/31165545711" aria-label="WhatsApp All Rent Roosendaal"><img class="wa" src="assets/icons/whatsapp.svg" alt="" width="32" height="32"></a>
             </div>
           </div>
@@ -849,13 +865,15 @@ main { position: relative; z-index: 1; }
 
     /* Footer-reveal: de footer ligt onder de pagina en schuift mee omhoog terwijl de content wegscrollt */
     const footer = $('.footer'), shift = $('.foot-shift');
-    let ticking = false;
+    let ticking = false, stableVh = document.documentElement.clientHeight;
+    addEventListener('resize', () => { const v = document.documentElement.clientHeight; if (Math.abs(v - stableVh) > 150) stableVh = v; });
     const update = () => {
       ticking = false;
-      const r = footer.getBoundingClientRect(), vh = innerHeight, h = r.height;
+      const r = footer.getBoundingClientRect(), vh = stableVh, h = r.height;
       if (r.top > vh || r.bottom < 0) return;
       const p = Math.min(1, Math.max(0, (vh - r.top) / Math.min(h, vh)));
-      shift.style.transform = `translate3d(0, ${(-(1 - p) * h * 0.3).toFixed(1)}px, 0)`;
+      const k = h > vh ? 0.15 : 0.3;
+      shift.style.transform = `translate3d(0, ${(-(1 - p) * Math.min(h, vh) * k).toFixed(1)}px, 0)`;
     };
     const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
     addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); update();
