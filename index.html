@@ -157,11 +157,19 @@ body.nav-open { overflow: hidden; }
 .tab:not([aria-selected="true"]):hover { background: rgba(255,255,255,.3); }
 .panel { background: var(--paper); color: var(--ink); padding: 24px; border-radius: 0 4px 4px 4px; display: flex; flex-direction: column; gap: 16px; }
 .field-label { font-size: 14px; font-weight: 600; letter-spacing: 0; line-height: 1; margin-bottom: 12px; display: block; }
-.loc { display: flex; gap: 8px; flex-wrap: wrap; }
-.loc button { display: flex; align-items: center; gap: 8px; height: 56px; padding: 0 24px; border-radius: 4px; font-weight: 500;
-  background: var(--mist); transition: background-color .3s, color .3s; }
+.loc { display: flex; gap: 8px; flex-wrap: wrap; position: relative; isolation: isolate; }
+.loc button { position: relative; display: flex; align-items: center; gap: 8px; height: 56px; padding: 0 24px; border-radius: 4px; font-weight: 500;
+  background: var(--mist); transition: background-color .3s, color .35s var(--ease-natural); }
 .loc button[aria-pressed="true"] { background: var(--ink); color: var(--white); }
 .loc button:not([aria-pressed="true"]):hover { background: #e8eaec; }
+/* Met JS: het donkere vlak schuift naar de gekozen vestiging */
+.loc.is-sliding button { background: transparent; }
+.loc.is-sliding button::before { content: ""; position: absolute; inset: 0; z-index: -2; border-radius: 4px; background: var(--mist); transition: background-color .3s; }
+.loc.is-sliding button:not([aria-pressed="true"]):hover::before { background: #e8eaec; }
+.loc.is-sliding::after { content: ""; position: absolute; z-index: -1; left: 0; top: 0; width: var(--w, 0); height: var(--h, 0); border-radius: 4px; background: var(--ink);
+  transform: translate(var(--x, 0), var(--y, 0)); transition: transform .5s var(--ease-natural), width .5s var(--ease-natural); }
+.dt-part [data-out].tick { animation: tick .45s var(--ease-slow); }
+@keyframes tick { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 .dates { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .dt { display: flex; align-items: center; height: 56px; border: 1px solid var(--line); border-radius: 4px; transition: border-color .2s; }
 .dt:hover, .dt:focus-within { border-color: var(--ink); }
@@ -187,7 +195,18 @@ body.nav-open { overflow: hidden; }
 
 /* Laadanimatie hero (Jitter: fade 0–800ms, tekst slide+mask) */
 @media (prefers-reduced-motion: no-preference) {
-  .nav, .search { animation: fadeIn .8s linear both; }
+  .nav { animation: fadeIn .8s linear both; }
+  /* Boekingsblok: paneel onthult zich van onder (mask reveal zoals in Jitter), tabs en rijen volgen getrapt */
+  .search .tab { animation: tabIn .7s var(--ease-natural) both; }
+  .search .tab:nth-child(1) { animation-delay: .62s; }
+  .search .tab:nth-child(2) { animation-delay: .7s; }
+  .search .panel { animation: panelIn 1s var(--ease-natural) .3s both; }
+  .search .panel > * { animation: rowIn .7s var(--ease-slow) both; }
+  .search .panel > :nth-child(1) { animation-delay: .55s; }
+  .search .panel > :nth-child(2) { animation-delay: .63s; }
+  .search .panel > :nth-child(3) { animation-delay: .71s; }
+  .search .panel > :nth-child(n+4) { animation-delay: .79s; }
+  .search .panel .btn-red .arrow-ring { animation: nudge .9s var(--ease-natural) 1.5s both; }
   .video-card { animation: fadeIn .8s linear .27s both; }
   .hero h1 .mline > span { animation: rise .9s var(--ease-smooth) both; }
   .hero h1 .mline:nth-child(1) > span { animation-delay: .07s; }
@@ -195,6 +214,10 @@ body.nav-open { overflow: hidden; }
   .hero .sub .mline > span { animation: rise .9s var(--ease-slow) .48s both; }
 }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes panelIn { from { clip-path: inset(100% 0 0 0 round 4px); } to { clip-path: inset(0 0 0 0 round 0 4px 4px 4px); } }
+@keyframes tabIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes rowIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes nudge { 0%, 100% { transform: none; } 40% { transform: translateX(4px); } }
 @keyframes rise { from { transform: translateY(105%); } to { transform: none; } }
 
 /* ───────── USP's ───────── */
@@ -778,8 +801,14 @@ main { position: relative; z-index: 1; }
   const setType = t => tabs.forEach(b => b.setAttribute('aria-selected', b.dataset.type === t));
   tabs.forEach(b => b.addEventListener('click', () => setType(b.dataset.type)));
   $$('[data-type-link]').forEach(a => a.addEventListener('click', () => setType(a.dataset.typeLink)));
-  const locs = $$('.loc button');
-  locs.forEach(b => b.addEventListener('click', () => locs.forEach(x => x.setAttribute('aria-pressed', x === b))));
+  const locs = $$('.loc button'), locWrap = $('.loc');
+  const placeLoc = () => {
+    const b = $('.loc button[aria-pressed="true"]');
+    locWrap.style.setProperty('--x', b.offsetLeft + 'px'); locWrap.style.setProperty('--y', b.offsetTop + 'px');
+    locWrap.style.setProperty('--w', b.offsetWidth + 'px'); locWrap.style.setProperty('--h', b.offsetHeight + 'px');
+  };
+  if (!reduce) { placeLoc(); locWrap.classList.add('is-sliding'); addEventListener('resize', placeLoc); document.fonts && document.fonts.ready.then(placeLoc); }
+  locs.forEach(b => b.addEventListener('click', () => { locs.forEach(x => x.setAttribute('aria-pressed', x === b)); placeLoc(); }));
 
   const fmt = d => d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' }).replace('.', '');
   const iso = d => new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
@@ -787,12 +816,19 @@ main { position: relative; z-index: 1; }
   const pd = $('#pickup-date'), rd = $('#return-date');
   pd.value = iso(today); pd.min = iso(today); rd.value = iso(later); rd.min = iso(today);
   const out = id => $(`[data-out="${id}"]`);
-  const paint = () => {
-    out('pickup-date').textContent = fmt(new Date(pd.value + 'T12:00'));
-    out('return-date').textContent = fmt(new Date(rd.value + 'T12:00'));
-    out('pickup-time').textContent = $('#pickup-time').value;
-    out('return-time').textContent = $('#return-time').value;
+  const setOut = (id, v) => {
+    const el = out(id); if (el.textContent === v) { el.dataset.ready = '1'; return; }
+    el.textContent = v;
+    if (!reduce && el.dataset.ready) { el.classList.remove('tick'); void el.offsetWidth; el.classList.add('tick'); }
+    el.dataset.ready = '1';
   };
+  const paint = () => {
+    setOut('pickup-date', fmt(new Date(pd.value + 'T12:00')));
+    setOut('return-date', fmt(new Date(rd.value + 'T12:00')));
+    setOut('pickup-time', $('#pickup-time').value);
+    setOut('return-time', $('#return-time').value);
+  };
+  ['pickup-date', 'return-date', 'pickup-time', 'return-time'].forEach(id => out(id).dataset.ready = '');
   paint();
   $$('.dt input').forEach(i => {
     i.addEventListener('input', () => {
