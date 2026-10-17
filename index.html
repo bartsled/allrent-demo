@@ -684,7 +684,7 @@ main { position: relative; z-index: 1; }
       <div class="qa-list" data-fade-stagger>
         <div class="qa"><button type="button" aria-expanded="false" id="q1" aria-controls="a1"><span>Ophalen en terugbrengen van de huurauto of -bus?</span><span class="ring"><span class="ico ico-12 i-arrow"></span></span></button>
           <div class="qa-a" id="a1" role="region" aria-labelledby="q1"><div><p>Ophalen kan tijdens onze openingstijden. Terugbrengen verschilt per vestiging: in Breda kan dat 24/7 via onze sleutelkluis, in Roosendaal tijdens openingstijden.</p></div></div></div>
-        <div class="qa is-open"><button type="button" aria-expanded="true" id="q2" aria-controls="a2"><span>Hoe werkt de borg?</span><span class="ring"><span class="ico ico-12 i-arrow"></span></span></button>
+        <div class="qa"><button type="button" aria-expanded="false" id="q2" aria-controls="a2"><span>Hoe werkt de borg?</span><span class="ring"><span class="ico ico-12 i-arrow"></span></span></button>
           <div class="qa-a" id="a2" role="region" aria-labelledby="q2"><div><p>Voor huurperiodes van 1 tot 3 dagen geldt een borg van €750. Deze betaal je met pin of creditcard (geen contant). Na inlevering van de auto of bus verrekenen we de huurkosten, extra kilometers en brandstof. Het restant storten we binnen twee werkdagen terug.</p></div></div></div>
         <div class="qa"><button type="button" aria-expanded="false" id="q3" aria-controls="a3"><span>Wat is een all-in prijs?</span><span class="ring"><span class="ico ico-12 i-arrow"></span></span></button>
           <div class="qa-a" id="a3" role="region" aria-labelledby="q3"><div><p>De prijzen die je op de website ziet, zijn de prijzen die je betaalt. Een tweede bestuurder, de verzekering en pechhulp in Nederland zijn inbegrepen. Alleen het eigen risico kun je nog verlagen.</p></div></div></div>
@@ -816,12 +816,12 @@ main { position: relative; z-index: 1; }
     requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.transition = `width ${DUR}ms linear`; bar.style.width = '100%'; }));
     timer = setTimeout(() => activate((i + 1) % steps.length, true), DUR + 300);
   };
-  steps.forEach((s, n) => $('button', s).addEventListener('click', () => { running = false; activate(n, false); }));
+  steps.forEach((s, n) => $('button', s).addEventListener('click', () => activate(n, running)));
   if ('IntersectionObserver' in window && !reduce) {
     new IntersectionObserver(([e]) => {
       if (e.isIntersecting && !running) { running = true; activate(cur, true); }
       else if (!e.isIntersecting && running) { running = false; activate(cur, false); }
-    }, { threshold: .4 }).observe($('.steps'));
+    }, { threshold: .25 }).observe($('.steps'));
   }
 
   /* FAQ-accordeon */
