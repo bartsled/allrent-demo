@@ -424,6 +424,13 @@ main { position: relative; z-index: 1; }
   .branch-row .wa { width: 28px; height: 28px; }
   .branch-row .details { grid-column: 2 / 4; grid-row: 2; display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
   .branch-row .details .addr, .branch-row .details .contact { white-space: nowrap; }
+  /* Tablet: adres en contact naast elkaar, zodat de witte kaart lager wordt en de foto meer ruimte krijgt */
+  .loc-grid { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); }
+  .branch-row { grid-template-columns: 72px minmax(0, 1fr) 28px; grid-template-rows: auto auto; align-items: center; gap: 6px 16px; }
+  .branch-row .thumb { width: 72px; min-height: 0; height: 100%; align-self: stretch; }
+  .branch-row .details { display: grid; grid-template-columns: 9.6em auto; gap: 0 20px; font-size: 14px; }
+  /* Tablet: lagere rode balk; safe-area vervangt de onderpadding in plaats van erbij op te tellen, zodat de tekst gecentreerd blijft */
+  .foot-bar { min-height: 0; padding-top: 16px; padding-bottom: max(16px, env(safe-area-inset-bottom, 0px)); font-size: 13px; }
   .faq-intro { padding-right: 24px; }
   .qa button { font-size: 18px; padding: 20px; }
   .qa-a p, .opts { padding: 0 20px 20px; font-size: 16px; }
@@ -460,12 +467,17 @@ main { position: relative; z-index: 1; }
   .foot-cta { padding-block: 40px; padding-right: max(var(--gutter), env(safe-area-inset-right, 0px)); }
   .foot-cta p { font-size: 20px; }
   .foot-img { min-height: 0; aspect-ratio: 4 / 3; }
-  .foot-bar { padding-right: max(var(--gutter), env(safe-area-inset-right, 0px)); }
+  .foot-bar { padding-right: max(var(--gutter), env(safe-area-inset-right, 0px)); min-height: 0;
+    padding-top: 16px; padding-bottom: max(16px, env(safe-area-inset-bottom, 0px)); font-size: 13px; }
 }
 .usp h3 { text-wrap: balance; }
 @media (max-width: 960px) and (min-width: 768px) {
   .usp { padding: 20px; gap: 48px; }
   .usp h3 { font-size: 17px; }
+  .branch-row { grid-template-columns: 64px minmax(0, 1fr) 28px; column-gap: 14px; }
+  .branch-row .thumb { width: 64px; }
+  .loc-grid { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); }
+  .branch-row .details { column-gap: 14px; font-size: 13px; }
 }
 @media (max-width: 767px) {
   .usp-grid { grid-template-columns: repeat(2, 1fr); }
@@ -485,6 +497,10 @@ main { position: relative; z-index: 1; }
   .rent-help { order: 2; margin-top: 8px; }
   .how .btn-row { flex-wrap: nowrap; }
   .how .btn-row .btn { flex: 1 1 0; min-width: 0; padding: 0 10px; font-size: 15px; }
+  .branch-row { grid-template-columns: 88px minmax(0, 1fr) 28px; align-items: start; gap: 8px 12px; }
+  .branch-row .thumb { width: 88px; min-height: 88px; }
+  .branch-row .name { align-self: center; }
+  .branch-row .details { display: flex; flex-direction: column; gap: 6px; }
   .foot-left { padding-top: 48px; gap: 0; }
   .foot-nav { gap: 10px; }
   .foot-nav a { font-size: 24px; }
